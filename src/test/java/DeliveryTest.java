@@ -27,7 +27,7 @@ public class DeliveryTest {
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id=date] .input__control").setValue(firstMeetingDate);
         $("[data-test-id=name] input").setValue(validUser.getName());
-        $("[data-test-id=phone] input").setValue(validUser.getPhone());
+        $("[data-test-id=phone] input").setValue("+78888888888");
         $("[data-test-id=agreement]").click();
         $x("//*[contains(text(), 'Забронировать')]").click();
         $("[data-test-id=notification] .notification__content")
