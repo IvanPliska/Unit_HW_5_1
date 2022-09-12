@@ -6,14 +6,12 @@ import org.openqa.selenium.Keys;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
-
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class DeliveryTest {
 
     @BeforeEach
-    void setup(){
+    void setup() {
         open("http://localhost:9999");
     }
 
@@ -32,12 +30,13 @@ public class DeliveryTest {
         $("[data-test-id=phone] input").setValue(validUser.getPhone());
         $("[data-test-id=agreement]").click();
         $x("//*[contains(text(), 'Забронировать')]").click();
-        $("[data-test-id=success-notification] .notification__content")
-                .shouldHave(exactText("Встреча успешно запланирована на " + firstMeetingDate), Duration.ofSeconds(15));
+        $("[data-test-id=notification] .notification__content")
+                .shouldBe(visible, Duration.ofSeconds(15)).should(exactText("Встреча успешно забронирована на " + firstMeetingDate));
+        $("[data-test-id=notification] .icon-button__content").click();
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id=date] .input__control").setValue(secondMeetingDate);
         $x("//*[contains(text(), 'Забронировать')]").click();
-        $("[data-test-id=success-notification] .notification__content")
-                .shouldHave(exactText("Встреча успешно запланирована на " + secondMeetingDate), Duration.ofSeconds(15));
+        $("[data-test-id=notification] .notification__content")
+                .shouldBe(visible, Duration.ofSeconds(15)).should(exactText("Встреча успешно забронирована на " + secondMeetingDate));
     }
 }
