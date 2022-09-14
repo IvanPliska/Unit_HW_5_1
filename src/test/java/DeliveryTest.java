@@ -6,6 +6,7 @@ import org.openqa.selenium.Keys;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class DeliveryTest {
@@ -27,16 +28,19 @@ public class DeliveryTest {
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id=date] .input__control").setValue(firstMeetingDate);
         $("[data-test-id=name] input").setValue(validUser.getName());
-        $("[data-test-id=phone] input").setValue("+78888888888");
+        $("[data-test-id=phone] input").setValue(validUser.getPhone());
         $("[data-test-id=agreement]").click();
-        $x("//*[contains(text(), 'Забронировать')]").click();
-        $("[data-test-id=notification] .notification__content")
-                .shouldBe(visible, Duration.ofSeconds(15)).should(exactText("Встреча успешно забронирована на " + firstMeetingDate));
-        $("[data-test-id=notification] .icon-button__content").click();
+        $x("//*[contains(text(), 'Запланировать')]").click();
+        $(byText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id=success-notification] .notification__content")
+                .shouldHave(exactText("Встреча успешно запланирована на " + firstMeetingDate));
         $("[data-test-id=date] .input__control").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id=date] .input__control").setValue(secondMeetingDate);
-        $x("//*[contains(text(), 'Забронировать')]").click();
-        $("[data-test-id=notification] .notification__content")
-                .shouldBe(visible, Duration.ofSeconds(15)).should(exactText("Встреча успешно забронирована на " + secondMeetingDate));
+        $x("//*[contains(text(), 'Запланировать')]").click();
+        $("[data-test-id=replan-notification] .notification__content")
+                .shouldHave(text("У вас уже запланирована встреча на другую дату. Перепланировать?"));
+        $("[data-test-id=replan-notification] button").click();
+        $("[data-test-id=success-notification] .notification__content")
+                .shouldHave(exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
 }
